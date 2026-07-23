@@ -1,0 +1,16 @@
+{{!-- Rendered by the {{navigation}} helper, which supplies label/url/current.
+Primary nav gives its last item the inverted button treatment from the design
+("All Articles"); secondary nav is the plain footer row. --}}
+{{#if isSecondary}}
+    <nav class="footer-nav">
+        {{#foreach navigation}}
+            <a href="{{url absolute="true"}}">{{label}}</a>
+        {{/foreach}}
+    </nav>
+{{else}}
+    <nav class="site-nav" id="site-nav">
+        {{#foreach navigation}}
+            <a class="nav-item{{#if @last}} nav-item-button{{/if}}{{#if current}} is-current{{/if}}" href="{{url absolute="true"}}">{{label}}</a>
+        {{/foreach}}
+    </nav>
+{{/if}}

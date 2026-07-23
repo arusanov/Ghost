@@ -1,0 +1,20 @@
+{{!< default}}
+{{!-- The /articles/ collection, plus the fallback for any paginated context --}}
+
+<main class="archive">
+
+    <header class="archive-head gutter">
+        <h1 class="archive-title">Articles</h1>
+        {{> "category-tabs"}}
+    </header>
+
+    <section class="section gutter">
+        <div class="grid grid-3">
+            {{#foreach posts}}
+                {{> "post-card" showExcerpt=true}}
+            {{/foreach}}
+        </div>
+        {{> "pagination"}}
+    </section>
+
+</main>

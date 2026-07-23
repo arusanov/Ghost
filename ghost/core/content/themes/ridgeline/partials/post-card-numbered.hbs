@@ -1,0 +1,9 @@
+{{!-- Compact numbered row used in the homepage category columns.
+Uses @number, the 1-based index supplied by the enclosing {{#foreach}}. --}}
+<a class="card-numbered" href="{{url}}">
+    <span class="card-num">{{#match @number "<" 10}}0{{/match}}{{@number}}</span>
+    <span>
+        <h4 class="card-numbered-title">{{title}}</h4>
+        <span class="meta">{{date format="MMM D"}}</span>
+    </span>
+</a>

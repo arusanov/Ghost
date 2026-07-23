@@ -1,0 +1,10 @@
+{{#if pagination.next}}
+    <nav class="pagination">
+        <a class="pagination-older" href="{{page_url "next"}}">Older stories &rarr;</a>
+        {{#if pagination.prev}}
+            <a class="pagination-newer" href="{{page_url "prev"}}">&larr; Newer</a>
+        {{/if}}
+    </nav>
+{{else}}
+    <p class="end-of-road">&mdash; end of the road, for now &mdash;</p>
+{{/if}}

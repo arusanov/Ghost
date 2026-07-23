@@ -1,0 +1,71 @@
+{
+    "name": "ridgeline",
+    "description": "Adventure motorcycle media theme for Ghost",
+    "version": "0.2.0",
+    "engines": {
+        "ghost": ">=5.0.0"
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Moto-Adv",
+        "email": "alexander.rusanov@gmail.com"
+    },
+    "keywords": [
+        "ghost",
+        "theme",
+        "ghost-theme"
+    ],
+    "config": {
+        "posts_per_page": 9,
+        "image_sizes": {
+            "xs": {
+                "width": 160
+            },
+            "s": {
+                "width": 320
+            },
+            "m": {
+                "width": 600
+            },
+            "l": {
+                "width": 960
+            },
+            "xl": {
+                "width": 1200
+            },
+            "xxl": {
+                "width": 2000
+            }
+        },
+        "card_assets": true,
+        "custom": {
+            "hero_source": {
+                "type": "select",
+                "options": [
+                    "Featured post",
+                    "Latest post"
+                ],
+                "default": "Featured post",
+                "group": "homepage"
+            },
+            "show_category_columns": {
+                "type": "boolean",
+                "default": true,
+                "group": "homepage"
+            },
+            "newsletter_heading": {
+                "type": "text",
+                "description": "Heading for the newsletter band. Defaults to the site title."
+            },
+            "newsletter_subheading": {
+                "type": "text",
+                "description": "Supporting copy for the newsletter band. Defaults to the site description."
+            },
+            "enable_drop_caps": {
+                "type": "boolean",
+                "default": true,
+                "group": "post"
+            }
+        }
+    }
+}

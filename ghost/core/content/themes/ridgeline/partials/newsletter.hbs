@@ -1,0 +1,21 @@
+{{#if @site.members_enabled}}
+{{#unless @member}}
+    <section class="newsletter">
+        <div class="newsletter-copy">
+            <h3 class="newsletter-title">{{#if @custom.newsletter_heading}}{{@custom.newsletter_heading}}{{else}}{{@site.title}}{{/if}}</h3>
+            <p class="newsletter-sub">{{#if @custom.newsletter_subheading}}{{@custom.newsletter_subheading}}{{else}}{{@site.description}}{{/if}}</p>
+        </div>
+        {{!-- The data-members-* attributes are what Portal hooks into; keep them as-is --}}
+        <form class="newsletter-form" data-members-form>
+            <label class="sr-only" for="newsletter-email">Email address</label>
+            <input class="newsletter-input" id="newsletter-email" name="email" type="email" placeholder="you@email.com" required data-members-email>
+            <button class="newsletter-button" type="submit">
+                <span class="btn-idle">Subscribe</span>
+                <span class="btn-loading">{{> "icons/loader"}}</span>
+                <span class="btn-done">Check your inbox</span>
+            </button>
+            <p class="newsletter-error" data-members-error></p>
+        </form>
+    </section>
+{{/unless}}
+{{/if}}

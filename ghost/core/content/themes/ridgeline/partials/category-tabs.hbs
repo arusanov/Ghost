@@ -1,0 +1,12 @@
+{{!-- Server-rendered replacement for the mockup's JS category tabs.
+Each tab is a real link to its tag archive, so categories paginate and are indexable.
+Param: activeSlug — passed by tag.hbs, absent on /articles/.
+The ../../ hops out of {{#foreach}} and then {{#get}} back to this partial's context. --}}
+<div class="tabs">
+    <a class="tab{{#unless activeSlug}} is-active{{/unless}}" href="/articles/">All</a>
+    {{#get "tags" filter="visibility:public" limit="12" order="name asc"}}
+        {{#foreach tags}}
+            <a class="tab{{#match slug ../../activeSlug}} is-active{{/match}}" href="{{url}}">{{name}}</a>
+        {{/foreach}}
+    {{/get}}
+</div>

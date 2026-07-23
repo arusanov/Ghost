@@ -1,0 +1,14 @@
+{{!-- Standard grid card. Params: showExcerpt (boolean) --}}
+<a class="card {{post_class}}" href="{{url}}">
+    <span class="card-media ratio-4x3">{{> "card-media" lazy=true}}</span>
+    <span class="card-body">
+        {{#if primary_tag}}
+            <span class="eyebrow">{{primary_tag.name}}</span>
+        {{/if}}
+        <h3 class="card-title">{{title}}</h3>
+        {{#if showExcerpt}}
+            <span class="card-excerpt">{{excerpt words="22"}}</span>
+        {{/if}}
+        <span class="meta">{{date format="MMM D"}} &middot; {{reading_time}}</span>
+    </span>
+</a>

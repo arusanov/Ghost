@@ -1,0 +1,19 @@
+{{!< default}}
+{{!-- Homepage. Resolves the hero post first, then hands it to "home-content" as a
+partial param so the Latest feed can exclude it via filter="id:-{{hero.id}}". --}}
+
+{{#match @custom.hero_source "Latest post"}}
+    {{#get "posts" limit="1" include="tags,authors" as |newest|}}
+        {{> "home-content" hero=newest.[0]}}
+    {{/get}}
+{{else}}
+    {{#get "posts" filter="featured:true" limit="1" include="tags,authors" as |featured|}}
+        {{#if featured.[0]}}
+            {{> "home-content" hero=featured.[0]}}
+        {{else}}
+            {{#get "posts" limit="1" include="tags,authors" as |newest|}}
+                {{> "home-content" hero=newest.[0]}}
+            {{/get}}
+        {{/if}}
+    {{/get}}
+{{/match}}

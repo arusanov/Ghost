@@ -1,0 +1,16 @@
+{{!< default}}
+
+<main class="error-page gutter">
+    <span class="error-code">{{statusCode}}</span>
+    <h1 class="post-title">{{message}}</h1>
+    <p class="end-of-road">&mdash; end of the road, for now &mdash;</p>
+    <a class="read-more" href="{{@site.url}}">Back to the start &rarr;</a>
+
+    {{#if errorDetails}}
+        <ul class="error-details">
+            {{#foreach errorDetails}}
+                <li><em>{{{this.ref}}}</em>: {{this.message}}</li>
+            {{/foreach}}
+        </ul>
+    {{/if}}
+</main>

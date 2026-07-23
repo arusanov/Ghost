@@ -1,0 +1,22 @@
+# Ridgeline routing.
+#
+# routes.yaml is NOT part of a Ghost theme — Ghost reads it from
+# content/settings/routes.yaml. This copy lives here so it travels with the
+# theme. Install it with either:
+#
+#   cp ghost/core/content/themes/ridgeline/routes.yaml \
+#      ghost/core/content/settings/routes.yaml && docker restart ghost-dev
+#
+# or Ghost Admin -> Settings -> Labs -> Routes -> Upload routes file.
+
+routes:
+  /: home
+
+collections:
+  /articles/:
+    permalink: /{slug}/
+    template: index
+
+taxonomies:
+  tag: /tag/{slug}/
+  author: /author/{slug}/

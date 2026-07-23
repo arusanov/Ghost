@@ -1,0 +1,14 @@
+<header class="site-header gutter">
+    {{!-- Brand lockup: the logo mark is the "T" glyph, fused into the wordmark.
+    onerror swaps in a plain red "T" if the asset ever fails to load. --}}
+    <a class="brand" href="{{@site.url}}" aria-label="{{@site.title}}">
+        <img class="brand-mark" src="{{asset "images/logo-mark.png"}}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
+        <span class="brand-fallback" aria-hidden="true">T</span><span class="brand-accent">HROTTLE</span>&nbsp;TIMES
+    </a>
+
+    <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+    </button>
+
+    {{navigation}}
+</header>

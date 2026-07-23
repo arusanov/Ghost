@@ -1,0 +1,75 @@
+{{!-- Body of the homepage. Param: hero (a post object; undefined only on an empty site) --}}
+<main class="home">
+
+    {{#if hero}}
+
+        {{#with hero}}
+            <section class="hero gutter">
+                <div class="hero-copy">
+                    <div class="kicker">
+                        {{#if primary_tag}}<span class="eyebrow">{{primary_tag.name}}</span>{{/if}}
+                        <span class="dot"></span>
+                        <span class="meta">{{date format="MMMM D, YYYY"}} &middot; {{reading_time}}</span>
+                    </div>
+                    <a href="{{url}}"><h1 class="hero-title">{{title}}</h1></a>
+                    <p class="hero-excerpt">{{excerpt words="38"}}</p>
+                    <a class="read-more" href="{{url}}">Read the Story &rarr;</a>
+                </div>
+                <a class="hero-media ratio-4x3" href="{{url}}">{{> "card-media"}}</a>
+            </section>
+        {{/with}}
+
+        <section class="section gutter">
+            <div class="section-head">
+                <h2 class="section-title">Latest</h2>
+                <a class="section-link" href="/articles/">View All &rarr;</a>
+            </div>
+            {{#get "posts" limit="6" filter="id:-{{hero.id}}" include="tags" as |latest|}}
+                <div class="grid grid-3">
+                    {{#foreach latest}}
+                        {{> "post-card"}}
+                    {{/foreach}}
+                </div>
+            {{/get}}
+        </section>
+
+        {{#if @custom.show_category_columns}}
+            <section class="section gutter">
+                <div class="columns">
+                    {{!-- The Content API can't filter tags by post count, so each column
+                    only renders once we know it actually has posts. --}}
+                    {{#get "tags" filter="visibility:public" limit="3" order="name asc" as |categories|}}
+                        {{#foreach categories}}
+                            {{#get "posts" filter="tag:{{slug}}" limit="3" as |tagPosts|}}
+                                {{#if tagPosts}}
+                                    <div class="column">
+                                        <div class="column-head">
+                                            <h3 class="column-title">{{../name}}</h3>
+                                            <a class="column-link" href="{{../url}}">More &rarr;</a>
+                                        </div>
+                                        <div class="column-list">
+                                            {{#foreach tagPosts}}
+                                                {{> "post-card-numbered"}}
+                                            {{/foreach}}
+                                        </div>
+                                    </div>
+                                {{/if}}
+                            {{/get}}
+                        {{/foreach}}
+                    {{/get}}
+                </div>
+            </section>
+        {{/if}}
+
+    {{else}}
+
+        <section class="section gutter">
+            <h1 class="hero-title">No stories yet.</h1>
+            <p class="hero-excerpt">The garage is open, the bikes are loaded. First dispatch coming soon.</p>
+        </section>
+
+    {{/if}}
+
+    {{> "newsletter"}}
+
+</main>
