@@ -225,3 +225,13 @@ yalc.lock
 .github/instructions/nx.instructions.md
 
 .nx/migrate-runs
+
+# Throttle Times operational overlay — never publish to this fork.
+# This repo is a PUBLIC fork of TryGhost/Ghost. The Ridgeline theme belongs here
+# (it's a Ghost theme, and it's already public), but the runbook, the content
+# agent, its prompts and the design mockups are operational detail and live in
+# the private arusanov/ttimes repo instead.
+CURRENT_SETUP.md
+scheduled_task.md
+throttle-times-draft-post.skill
+theme_design/
