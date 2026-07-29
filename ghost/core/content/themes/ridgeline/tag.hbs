@@ -4,9 +4,6 @@
 <main class="archive">
 
     {{#tag}}
-        {{!-- On a tag page the tag is itself the final crumb, so no `name` param. --}}
-        {{> "breadcrumbs" primary_tag=this}}
-
         <header class="archive-head gutter">
             <h1 class="archive-title">{{name}}</h1>
             {{#if description}}<p class="archive-description">{{description}}</p>{{/if}}
