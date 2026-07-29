@@ -1,5 +1,13 @@
 <footer class="site-footer gutter">
     <span class="wordmark wordmark-sm">{{@site.title}}</span>
     {{navigation type="secondary"}}
-    <span class="footer-note">&copy; {{date format="YYYY"}} {{@site.title}}. For the long way round.</span>
+    <span class="footer-note">
+        &copy; {{date format="YYYY"}} {{@site.title}}. For the long way round.
+        {{!-- routes.yaml puts the collection at /articles/, so the feed is
+              /articles/rss/ — not Ghost's default /rss/. --}}
+        <a class="footer-cookie-link" href="{{@site.url}}/articles/rss/">RSS</a>
+        {{#if @custom.google_analytics_id}}
+            <a class="footer-cookie-link" href="#" data-cookie-settings>Cookie settings</a>
+        {{/if}}
+    </span>
 </footer>

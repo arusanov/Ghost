@@ -1,0 +1,17 @@
+{{!-- Cookie consent banner. Only shown when analytics is configured. Hidden by
+default; main.js reveals it when there's no stored choice, and handles Accept/Reject.
+Reject is presented as prominently as Accept, per GDPR. --}}
+{{#if @custom.google_analytics_id}}
+<div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent" hidden>
+    <div class="cookie-banner-inner gutter">
+        <p class="cookie-text">
+            We use analytics cookies to understand how the site is used. You choose.
+            See our <a href="/privacy/">Privacy &amp; Cookie Policy</a>.
+        </p>
+        <div class="cookie-actions">
+            <button type="button" class="cookie-btn cookie-btn-reject" data-consent="denied">Reject</button>
+            <button type="button" class="cookie-btn cookie-btn-accept" data-consent="granted">Accept</button>
+        </div>
+    </div>
+</div>
+{{/if}}

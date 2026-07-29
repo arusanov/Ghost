@@ -764,6 +764,12 @@ img {
     padding: 0 24px 48px;
 }
 
+/* Centre images narrower than the container instead of letting them hug the left */
+.post-feature img {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .post-feature figcaption {
     font-family: var(--mono);
     font-size: 11px;
@@ -791,6 +797,125 @@ img {
     margin: 0 auto;
     padding-bottom: 88px;
     border-top: 1px solid var(--hairline);
+}
+
+/* ------------------------------------------------------- breadcrumbs */
+
+.breadcrumbs {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 24px 0;
+}
+
+.breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+}
+
+.breadcrumbs li + li::before {
+    content: "/";
+    margin-right: 8px;
+    color: var(--ink-30);
+}
+
+.breadcrumbs a {
+    color: var(--ink-60);
+    text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+    color: var(--ink);
+}
+
+/* The trailing crumb is the current page — long titles would wrap the row, so
+   clamp it rather than let it dominate. */
+.breadcrumbs li:last-child span {
+    display: inline-block;
+    max-width: 32ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
+}
+
+/* The archive templates own their top padding, so drop the duplicate. */
+.archive .breadcrumbs {
+    max-width: 1040px;
+    padding-bottom: 8px;
+}
+
+/* The post header assumes it starts the page; with a crumb trail above it,
+   its 64px top padding leaves a hole. */
+.breadcrumbs + .post-header {
+    padding-top: 24px;
+}
+
+/* --------------------------------------------------- table of contents */
+
+.post-toc {
+    max-width: 680px;
+    margin: 0 auto 40px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.post-toc-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-50);
+    margin: 0 0 12px;
+}
+
+.post-toc ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: toc;
+}
+
+.post-toc li {
+    counter-increment: toc;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.post-toc li::before {
+    content: counter(toc, decimal-leading-zero);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-30);
+    margin-right: 10px;
+}
+
+.post-toc a {
+    color: var(--ink-70);
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.post-toc a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+}
+
+/* Deep links from a search result land mid-page; keep the heading clear of
+   anything sticky and give it a little breathing room. */
+.article-body h2 {
+    scroll-margin-top: 24px;
 }
 
 /* ------------------------------------------------- article typography */
@@ -1134,5 +1259,106 @@ img {
     .site-footer {
         flex-direction: column;
         align-items: flex-start;
+    }
+}
+
+/* --------------------------------------------------- cookie consent banner */
+
+.cookie-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--bg);
+    border-top: 3px solid var(--accent);
+}
+
+.cookie-banner[hidden] {
+    display: none;
+}
+
+.cookie-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.cookie-text {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(245, 242, 236, 0.8);
+    max-width: 760px;
+}
+
+.cookie-text a {
+    color: var(--bg);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.cookie-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.cookie-btn {
+    font-family: var(--body);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 11px 22px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid rgba(245, 242, 236, 0.35);
+    background: transparent;
+    color: var(--bg);
+}
+
+.cookie-btn-reject:hover {
+    border-color: var(--bg);
+}
+
+.cookie-btn-accept {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.cookie-btn-accept:hover {
+    filter: brightness(1.08);
+}
+
+.footer-cookie-link {
+    margin-left: 12px;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.footer-cookie-link:hover {
+    color: var(--accent);
+}
+
+@media (max-width: 700px) {
+    .cookie-banner-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .cookie-actions {
+        width: 100%;
+    }
+
+    .cookie-btn {
+        flex: 1;
     }
 }

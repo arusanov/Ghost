@@ -7,12 +7,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    {{!-- Display + body typefaces, matching the Ridgeline design --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    {{!-- Display + body typefaces, self-hosted. These used to load from
+          fonts.googleapis.com, which put a render-blocking cross-origin
+          stylesheet plus two extra origins on the critical path of every page.
+          Preload only the two faces that are always above the fold: Archivo 900
+          (the headline) and Inter 400 (body copy). --}}
+    <link rel="preload" href="{{asset "fonts/archivo-900-latin.woff2"}}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{asset "fonts/inter-400-latin.woff2"}}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css"}}">
 
     <link rel="stylesheet" type="text/css" href="{{asset "css/screen.css"}}">
+
+    {{!-- gtag.js is fetched async from a third origin; warm the connection now
+          rather than paying DNS + TLS at request time. --}}
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+
+    {{!-- Analytics + Consent Mode default (must run before any tracking) --}}
+    {{> "analytics"}}
 
     {{!-- This tag outputs all your advanced SEO meta, structured data, and other
     important settings, it should always be the last tag before the closing head tag --}}
@@ -31,7 +42,9 @@
 
 </div>
 
-<script src="{{asset "js/main.js"}}"></script>
+{{> "cookie-consent"}}
+
+<script defer src="{{asset "js/main.js"}}"></script>
 
 {{!-- Ghost outputs required functional scripts with this tag, it should always
 be the last thing before the closing body tag --}}

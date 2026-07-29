@@ -1,0 +1,43 @@
+{{!--
+    Visible breadcrumb trail, annotated with schema.org microdata.
+
+    Ghost's {{ghost_head}} emits Article, WebSite, Series and Person schema but
+    never BreadcrumbList, so this fills a real gap. It's done as microdata on
+    visible markup rather than a JSON-LD block on purpose: Handlebars
+    HTML-escapes interpolated values, and inside a <script type="application/ld+json">
+    (a raw-text element, where entities are never decoded) that would leave
+    literal &#x27; and &quot; sequences in the structured data. In visible HTML
+    the same escaping is exactly right. Readers get a nav trail out of it too.
+
+    Params:
+      trail_title — the trailing, non-linked crumb (the post title). Omit on tag
+                    pages, where the tag itself is the final crumb.
+
+    The param is named `trail_title`, not `name`, deliberately: a partial
+    inherits the calling context, and on a tag page that context is the tag —
+    which has its own `name`. A param called `name` would silently resolve to
+    the tag's name and render the tag twice.
+--}}
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a itemprop="item" href="{{@site.url}}/"><span itemprop="name">Home</span></a>
+            <meta itemprop="position" content="1">
+        </li>
+        {{#if primary_tag}}
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a itemprop="item" href="{{primary_tag.url}}"><span itemprop="name">{{primary_tag.name}}</span></a>
+                <meta itemprop="position" content="2">
+            </li>
+        {{/if}}
+        {{#if trail_title}}
+            {{!-- No itemprop="item" on the last crumb: schema.org and Google both
+                  treat the trailing element's URL as optional, and it's the page
+                  you're already on. --}}
+            <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name" aria-current="page">{{trail_title}}</span>
+                <meta itemprop="position" content="{{#if primary_tag}}3{{else}}2{{/if}}">
+            </li>
+        {{/if}}
+    </ol>
+</nav>
