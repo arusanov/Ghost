@@ -2,10 +2,15 @@
 <html lang="{{@site.locale}}">
 <head>
 
-    {{!-- Basic meta - advanced meta is output with {{ghost_head}} below --}}
-    <title>{{meta_title}}</title>
+    {{!-- Basic meta - advanced meta is output with {{ghost_head}} below.
+          Custom collection routes (/articles/) get a generic "Site Title (Page 1)"
+          from Ghost with no meta description, so override both there. --}}
+    <title>{{#is "home, post, page, tag, author"}}{{meta_title}}{{else}}All Articles{{#is "paged"}} (Page {{pagination.page}}){{/is}} - {{@site.title}}{{/is}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{^is "home, post, page, tag, author, paged"}}
+    <meta name="description" content="All motorcycle news, adventure bike buyer's guides, gear reviews, spy shots, and patent filings published on {{@site.title}}.">
+    {{/is}}
 
     {{!-- Display + body typefaces, self-hosted. These used to load from
           fonts.googleapis.com, which put a render-blocking cross-origin
@@ -25,22 +30,16 @@
     {{!-- Analytics + Consent Mode default (must run before any tracking) --}}
     {{> "analytics"}}
 
-    {{!-- Thin tag archives are kept out of the index.
-
-          A tag page with one or two posts is a near-empty listing whose only
-          content is a headline the post itself already carries. Google crawls
-          them and leaves them unindexed, which is a wasted crawl and noise in
-          Search Console; the site had 39 tag pages, 15 of them below this
-          threshold. `follow` is deliberate — the archive still passes link
-          equity through to the posts it lists.
-
-          Count-based rather than a hand-maintained deny-list, so a tag starts
-          being indexed on its own once it has enough posts to be a real topic
-          page. `pagination.total` is the tag's whole post count, not the
-          current page's, and it's undefined outside paginated routes — which
-          fails safe, since the comparison is then false and nothing is
-          emitted. --}}
-    {{#is "tag"}}{{#match pagination.total "<" 3}}<meta name="robots" content="noindex, follow">{{/match}}{{/is}}
+    {{!-- Keep paginated archive pages (/articles/page/2/, /tag/*/page/2/) and
+          0-post tag pages out of the index while following their links.
+          Tags with >=1 post are included in Ghost's auto-generated
+          sitemap-tags.xml, so marking them noindex causes "Submitted URL
+          marked 'noindex'" errors in Search Console. --}}
+    {{#is "paged"}}
+    <meta name="robots" content="noindex, follow">
+    {{else}}
+    {{#is "tag"}}{{#match pagination.total "<" 1}}<meta name="robots" content="noindex, follow">{{/match}}{{/is}}
+    {{/is}}
 
     {{!-- This tag outputs all your advanced SEO meta, structured data, and other
     important settings, it should always be the last tag before the closing head tag --}}

@@ -4,7 +4,7 @@ Param: activeSlug — passed by tag.hbs, absent on /articles/.
 The ../../ hops out of {{#foreach}} and then {{#get}} back to this partial's context. --}}
 <div class="tabs">
     <a class="tab{{#unless activeSlug}} is-active{{/unless}}" href="/articles/">All</a>
-    {{#get "tags" filter="visibility:public" limit="12" order="name asc"}}
+    {{#get "tags" filter="visibility:public" include="count.posts" limit="12" order="count.posts desc"}}
         {{#foreach tags}}
             <a class="tab{{#match slug ../../activeSlug}} is-active{{/match}}" href="{{url}}">{{name}}</a>
         {{/foreach}}
