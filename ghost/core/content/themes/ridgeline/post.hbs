@@ -82,10 +82,67 @@
     {{/if}}
 
 </main>
+{{#if primary_tag}}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+        {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "{{@site.url}}"
+        },
+        {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "{{primary_tag.name}}",
+            "item": "{{primary_tag.url}}"
+        }{{#if tags.[1]}},
+        {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "{{tags.[1].name}}",
+            "item": "{{tags.[1].url}}"
+        }{{/if}}
+    ]
+}
+</script>
+{{/if}}
 {{/post}}
 
-{{!-- Related posts: same primary tag where possible, otherwise just the newest others --}}
-{{#if post.primary_tag}}
+{{!-- Related posts: prefer the second tag (brand/segment, e.g. KTM, Helmets)
+      so articles cluster by topic instead of all matching primary_tag ("News"). --}}
+{{#if post.tags.[1]}}
+    {{#get "posts" filter="tag:{{post.tags.[1].slug}}+id:-{{post.id}}" limit="3" include="tags" as |related|}}
+        {{#if related}}
+            <section class="section related gutter">
+                <h2 class="section-title">More From {{../post.tags.[1].name}}</h2>
+                <div class="grid grid-3">
+                    {{#foreach related}}
+                        {{> "post-card"}}
+                    {{/foreach}}
+                </div>
+            </section>
+        {{else}}
+            {{#if ../post.primary_tag}}
+                {{#get "posts" filter="tag:{{../post.primary_tag.slug}}+id:-{{../post.id}}" limit="3" include="tags" as |fallback|}}
+                    {{#if fallback}}
+                        <section class="section related gutter">
+                            <h2 class="section-title">More From {{../../post.primary_tag.name}}</h2>
+                            <div class="grid grid-3">
+                                {{#foreach fallback}}
+                                    {{> "post-card"}}
+                                {{/foreach}}
+                            </div>
+                        </section>
+                    {{/if}}
+                {{/get}}
+            {{/if}}
+        {{/if}}
+    {{/get}}
+{{else if post.primary_tag}}
     {{#get "posts" filter="tag:{{post.primary_tag.slug}}+id:-{{post.id}}" limit="3" include="tags" as |related|}}
         {{#if related}}
             <section class="section related gutter">

@@ -33,6 +33,22 @@
             {{/get}}
         </section>
 
+        {{#get "posts" filter="tag:hash-guides+id:-{{hero.id}}" limit="6" include="tags" as |guides|}}
+            {{#if guides}}
+                <section class="section gutter">
+                    <div class="section-head">
+                        <h2 class="section-title">Buyer's Guides &amp; Comparisons</h2>
+                        <a class="section-link" href="/tag/motorcycles/">Explore All &rarr;</a>
+                    </div>
+                    <div class="grid grid-3">
+                        {{#foreach guides}}
+                            {{> "post-card" showExcerpt=true}}
+                        {{/foreach}}
+                    </div>
+                </section>
+            {{/if}}
+        {{/get}}
+
         {{#if @custom.show_category_columns}}
             <section class="section gutter">
                 <div class="columns">

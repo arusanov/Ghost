@@ -9,6 +9,26 @@
             {{#if description}}<p class="archive-description">{{description}}</p>{{/if}}
             {{> "category-tabs" activeSlug=slug}}
         </header>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "{{@site.url}}"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "{{name}}",
+                    "item": "{{url}}"
+                }
+            ]
+        }
+        </script>
     {{/tag}}
 
     <section class="section gutter">
