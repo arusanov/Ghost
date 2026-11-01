@@ -43,6 +43,28 @@
 
     {{!-- This tag outputs all your advanced SEO meta, structured data, and other
     important settings, it should always be the last tag before the closing head tag --}}
+    <link rel="me" href="https://mastodon.social/@hrottle_times">
+    <link rel="me" href="https://x.com/Throttle_Times">
+    <link rel="me" href="https://bsky.app/profile/throttletimes.bsky.social">
+    <link rel="hub" href="https://pubsubhubbub.appspot.com/">
+    {{#is "home"}}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "{{@site.title}}",
+        "url": "{{@site.url}}",
+        "logo": "{{@site.url}}/content/images/throttle-favicon.png",
+        "sameAs": [
+            "https://x.com/Throttle_Times",
+            "https://bsky.app/profile/throttletimes.bsky.social",
+            "https://t.me/hthrottle_times",
+            "https://www.reddit.com/r/ThrottleTimes/",
+            "https://mastodon.social/@hrottle_times"
+        ]
+    }
+    </script>
+    {{/is}}
     {{ghost_head}}
 
 </head>
