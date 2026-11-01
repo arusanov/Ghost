@@ -1,7 +1,7 @@
 {
     "name": "ridgeline",
     "description": "Adventure motorcycle media theme for Ghost",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "engines": {
         "ghost": ">=5.0.0"
     },

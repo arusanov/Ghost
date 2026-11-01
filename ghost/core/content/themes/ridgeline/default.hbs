@@ -38,7 +38,7 @@
     {{#is "paged"}}
     <meta name="robots" content="noindex, follow">
     {{else}}
-    {{#is "tag"}}{{#match pagination.total "<" 1}}<meta name="robots" content="noindex, follow">{{/match}}{{/is}}
+    {{#is "tag"}}{{#match pagination.total "<" 1}}<meta name="robots" content="noindex, follow">{{else}}<meta name="robots" content="index, follow, max-image-preview:large">{{/match}}{{else}}<meta name="robots" content="index, follow, max-image-preview:large">{{/is}}
     {{/is}}
 
     {{!-- This tag outputs all your advanced SEO meta, structured data, and other
