@@ -10,7 +10,7 @@ Params: lazy (boolean) --}}
                 {{img_url feature_image size="xl"}} 1200w"
         sizes="(max-width: 700px) 100vw, 33vw"
         alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
-        {{#if lazy}}loading="lazy"{{/if}}>
+        {{#if lazy}}loading="lazy" decoding="async"{{else}}fetchpriority="high" decoding="async"{{/if}}>
 {{else}}
     <span class="media-placeholder" aria-hidden="true">
         <span class="media-label">PHOTO — {{#if primary_tag}}{{primary_tag.name}}{{else}}{{@site.title}}{{/if}}</span>
