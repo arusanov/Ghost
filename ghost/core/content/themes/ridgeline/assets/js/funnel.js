@@ -77,7 +77,8 @@
             .then(function (member) {
                 if (!allowed) return;
                 var pending = read(PENDING, DAY);
-                if (!pending || !member || !member.subscribed || !Array.isArray(member.newsletters) || !member.newsletters.length) return;
+                // Ghost’s legacy subscribed flag can be false for members with newsletter subscriptions.
+                if (!pending || !member || !Array.isArray(member.newsletters) || !member.newsletters.length) return;
                 var created = Date.parse(member.created_at);
                 // Existing members signing in must never become acquisition conversions.
                 if (!Number.isFinite(created) || created < pending.at - 60000 || created > Date.now() + 60000) return;

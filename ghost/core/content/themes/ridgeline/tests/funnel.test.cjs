@@ -103,9 +103,9 @@ test('campaign persists across internal pages, expires and rejects unsafe values
     assert.equal(expired.events[0][2].acq_source, undefined);
 });
 
-test('confirmed new subscribed member uses the campaign frozen at signup; consumes pending', async () => {
+test('confirmed newsletter member converts despite legacy flag; freezes campaign and consumes pending', async () => {
     const pending = {at: 1800000000000, campaign: {source: 'google', medium: 'cpc', campaign: 'test'}, placement: 'newsletter_band'};
-    const s = setup({confirm: true, storage: {'tt-newsletter-pending': JSON.stringify(pending)}, member: {subscribed: true, newsletters: [{}], created_at: new Date(pending.at).toISOString(), email: 'private@example.org'}});
+    const s = setup({confirm: true, storage: {'tt-newsletter-pending': JSON.stringify(pending)}, member: {subscribed: false, newsletters: [{}], created_at: new Date(pending.at).toISOString(), email: 'private@example.org'}});
     await new Promise(setImmediate);
     assert.equal(s.names().at(-1), 'newsletter_subscribe');
     assert.equal(s.events.at(-1)[2].acq_source, 'google');
@@ -120,6 +120,7 @@ test('existing members, unsubscribed members, API errors and untracked returns d
     for (const options of [
         {member: {subscribed: true, newsletters: [{}], created_at: '2020-01-01'}},
         {member: {subscribed: false, newsletters: [], created_at: new Date(1800000000000).toISOString()}},
+        {member: {subscribed: true, newsletters: [], created_at: new Date(1800000000000).toISOString()}},
         {apiError: true}, {confirm: false}, {storage: {}}, {consent: false}
     ]) {
         const s = setup({confirm: true, storage: pending, ...options});
