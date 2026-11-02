@@ -979,6 +979,47 @@ img {
     margin: 0;
 }
 
+/* Callout and Key Takeaways box: when blockquote contains a list */
+.article-body blockquote:has(ul),
+.article-body blockquote:has(ol) {
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 18px 24px 18px 24px;
+    margin: 32px 0;
+    background: var(--paper-a);
+    border-radius: 0 4px 4px 0;
+}
+
+.article-body blockquote:has(ul) p:first-child,
+.article-body blockquote:has(ol) p:first-child {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 10px;
+}
+
+.article-body blockquote ul,
+.article-body blockquote ol {
+    font-family: var(--body);
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 8px 0 0 20px;
+    padding: 0;
+}
+
+.article-body blockquote li {
+    margin-bottom: 6px;
+}
+
+.article-body blockquote li:last-child {
+    margin-bottom: 0;
+}
+
 .article-body hr {
     border: none;
     border-top: 1px solid var(--hairline);
@@ -1021,7 +1062,10 @@ img {
 }
 
 .article-body table {
+    display: block;
     width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border-collapse: collapse;
     font-size: 15px;
     margin: 0 0 22px;
@@ -1030,8 +1074,15 @@ img {
 .article-body th,
 .article-body td {
     border-bottom: 1px solid var(--hairline);
-    padding: 10px 12px;
+    padding: 10px 14px;
     text-align: left;
+    white-space: nowrap;
+}
+
+.article-body th:first-child,
+.article-body td:first-child {
+    white-space: normal;
+    min-width: 140px;
 }
 
 /* Drop cap on the opening paragraph only, per the design */
