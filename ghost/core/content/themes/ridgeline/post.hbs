@@ -63,7 +63,7 @@
         </figure>
     {{/if}}
 
-    <article class="article-body {{post_class}}{{#if @custom.enable_drop_caps}} has-drop-cap{{/if}}">
+    <article {{#if access}}data-analytics-post="{{id}}"{{/if}} class="article-body {{post_class}}{{#if @custom.enable_drop_caps}} has-drop-cap{{/if}}">
         {{content}}
     </article>
 

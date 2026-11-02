@@ -26,7 +26,33 @@ cookie banner. A previously stored "granted" choice is re-applied on load. --}}
         }
     } catch (e) {}
 
-    gtag('config', '{{@custom.google_analytics_id}}');
+    // Capture the confirmation before Portal removes its query parameters.
+    var ttUrl = new URL(window.location.href);
+    window.ttSignupReturn = ttUrl.searchParams.get('success') === 'true' &&
+        ['signup', 'subscribe'].indexOf(ttUrl.searchParams.get('action')) !== -1;
+    window.ttLandingCampaign = {};
+    var ttSafeUrl = new URL(ttUrl.origin + ttUrl.pathname);
+    ['source', 'medium', 'campaign', 'id', 'content'].forEach(function (key) {
+        var value = ttUrl.searchParams.get('utm_' + key);
+        if (value && /^[a-zA-Z0-9_.~-]{1,100}$/.test(value)) {
+            window.ttLandingCampaign[key] = value;
+            ttSafeUrl.searchParams.set('utm_' + key, value);
+        }
+    });
+    // Google auto-tagging needs these; never pass Ghost tokens or email queries.
+    ['gclid', 'gbraid', 'wbraid'].forEach(function (key) {
+        var value = ttUrl.searchParams.get(key);
+        if (value && /^[a-zA-Z0-9_.~-]{1,500}$/.test(value)) ttSafeUrl.searchParams.set(key, value);
+    });
+    var ttReferrer = '';
+    try {
+        var ttRef = new URL(document.referrer);
+        ttReferrer = ttRef.origin + ttRef.pathname;
+    } catch (e) {}
+    gtag('config', '{{@custom.google_analytics_id}}', {
+        page_location: ttSafeUrl.href,
+        page_referrer: ttReferrer
+    });
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id={{@custom.google_analytics_id}}"></script>
 {{/if}}

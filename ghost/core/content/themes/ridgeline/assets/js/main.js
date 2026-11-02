@@ -1,4 +1,4 @@
-/* Ridgeline — the only two things this theme needs JS for. */
+/* Ridgeline navigation, consent and article enhancements. */
 (function () {
     'use strict';
 
@@ -27,9 +27,10 @@
 
         var setConsent = function (choice) {
             try { localStorage.setItem(CONSENT_KEY, choice); } catch (e) {}
-            if (choice === 'granted' && typeof window.gtag === 'function') {
-                window.gtag('consent', 'update', { analytics_storage: 'granted' });
+            if (typeof window.gtag === 'function') {
+                window.gtag('consent', 'update', { analytics_storage: choice === 'granted' ? 'granted' : 'denied' });
             }
+            document.dispatchEvent(new CustomEvent('tt-consent', {detail: choice}));
             banner.hidden = true;
         };
 

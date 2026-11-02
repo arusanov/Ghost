@@ -45,10 +45,28 @@ editing existing ones does not.
 Validate before shipping:
 
 ```bash
-cd ghost/core/content/themes/ridgeline && npx gscan .
+pnpm exec node --test ghost/core/content/themes/ridgeline/tests/funnel.test.cjs
+pnpm dlx gscan@latest ghost/core/content/themes/ridgeline
 ```
 
 ## Theme settings
 
 Design → Ridgeline exposes: hero source (featured vs latest post), homepage category
 columns on/off, newsletter heading/subheading overrides, and drop caps on posts.
+
+## Analytics funnel
+
+When a Google Analytics ID is configured, consented article views emit `article_view`.
+A visible tab with 45 seconds elapsed and half of the article reached emits
+`qualified_read` once per page. Native newsletter forms emit `newsletter_start`,
+`newsletter_email_sent` or `newsletter_error`. A confirmed, authenticated new member
+with a newsletter subscription emits `newsletter_subscribe`; sending a magic-link
+email alone is not a subscription. Portal tracks entry and confirmed return only.
+
+Tagged links use `utm_source`, `utm_medium`, `utm_campaign`, plus optional `utm_id`
+and `utm_content`. Values are slug tokens (letters, digits, `_`, `.`, `~`, `-`, up to
+100 characters). Consented browser storage retains the latest tagged campaign for
+30 days and freezes it at signup for a same-browser confirmation within 24 hours.
+Events include corresponding `acq_*` parameters; register event-scoped GA dimensions
+for reporting. Do not use personal information in campaign tags. No member identifiers
+are sent by this tracker. Withdrawing analytics consent clears its stored records.

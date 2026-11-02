@@ -85,6 +85,9 @@
 {{> "cookie-consent"}}
 
 <script defer src="{{asset "js/main.js"}}"></script>
+{{#if @custom.google_analytics_id}}
+<script defer src="{{asset "js/funnel.js"}}"></script>
+{{/if}}
 
 {{!-- Ghost outputs required functional scripts with this tag, it should always
 be the last thing before the closing body tag --}}
