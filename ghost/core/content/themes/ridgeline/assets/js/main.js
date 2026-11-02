@@ -57,7 +57,7 @@
     // section, and gives an answer engine something to cite), and offer a jump
     // list on longer pieces.
     var body = document.querySelector('.article-body');
-    var headings = body ? body.querySelectorAll('h2') : [];
+    var headings = body ? body.querySelectorAll('h2:not(.post-toc-title)') : [];
 
     var slugify = function (text) {
         return text.toLowerCase().trim()
@@ -80,8 +80,9 @@
         });
     }
 
-    // Only worth a jump list when there's actually something to jump past.
-    if (headings.length >= 3) {
+    // Only worth a jump list when there's actually something to jump past,
+    // and skip if a server-rendered .post-toc is already present.
+    if (headings.length >= 3 && !document.querySelector('.post-toc')) {
         var toc = document.createElement('nav');
         toc.className = 'post-toc';
         toc.setAttribute('aria-labelledby', 'toc-heading');

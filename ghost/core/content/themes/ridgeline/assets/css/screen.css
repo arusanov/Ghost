@@ -856,7 +856,12 @@ img {
     border-bottom: 1px solid var(--hairline);
 }
 
-.post-toc-title {
+.article-body > .post-toc {
+    padding: 20px 0;
+}
+
+.post-toc-title,
+.article-body .post-toc-title {
     font-family: var(--mono);
     font-size: 11px;
     font-weight: 500;
@@ -866,7 +871,8 @@ img {
     margin: 0 0 12px;
 }
 
-.post-toc ol {
+.post-toc ol,
+.article-body .post-toc ol {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -887,13 +893,15 @@ img {
     margin-right: 10px;
 }
 
-.post-toc a {
+.post-toc a,
+.article-body .post-toc a {
     color: var(--ink-70);
     text-decoration: none;
     font-size: 16px;
 }
 
-.post-toc a:hover {
+.post-toc a:hover,
+.article-body .post-toc a:hover {
     color: var(--ink);
     text-decoration: underline;
 }
