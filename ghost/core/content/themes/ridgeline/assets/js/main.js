@@ -121,4 +121,19 @@
         iframe.parentNode.insertBefore(wrapper, iframe);
         wrapper.appendChild(iframe);
     });
+
+    // Quick-search shortcut: press '/' when outside input elements to open Ghost search modal
+    document.addEventListener('keydown', function (e) {
+        if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            var active = document.activeElement;
+            var isInput = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable);
+            if (!isInput) {
+                var searchBtn = document.querySelector('[data-ghost-search]');
+                if (searchBtn) {
+                    e.preventDefault();
+                    searchBtn.click();
+                }
+            }
+        }
+    });
 })();
