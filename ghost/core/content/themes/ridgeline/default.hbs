@@ -46,6 +46,7 @@
     <link rel="me" href="https://mastodon.social/@hrottle_times">
     <link rel="me" href="https://x.com/Throttle_Times">
     <link rel="me" href="https://bsky.app/profile/throttle-times.com">
+    <link rel="me" href="https://www.facebook.com/throttleetimes/">
     <link rel="hub" href="https://pubsubhubbub.appspot.com/">
     {{#is "home"}}
     <script type="application/ld+json">
@@ -54,14 +55,19 @@
         "@type": "NewsMediaOrganization",
         "name": "{{@site.title}}",
         "url": "{{@site.url}}",
-        "logo": "{{@site.url}}/content/images/throttle-favicon.png",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{@site.url}}/content/images/throttle-favicon.png",
+            "width": 512,
+            "height": 512
+        },
         "foundingDate": "2026",
         "publishingPrinciples": "{{@site.url}}/about/",
         "sameAs": [
             "https://x.com/Throttle_Times",
             "https://bsky.app/profile/throttle-times.com",
             "https://t.me/hthrottle_times",
-            "https://www.reddit.com/r/ThrottleTimes/",
+            "https://www.facebook.com/throttleetimes/",
             "https://mastodon.social/@hrottle_times"
         ]
     }

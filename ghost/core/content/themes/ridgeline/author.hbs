@@ -16,6 +16,31 @@
                 </div>
             </div>
         </header>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            "mainEntity": {
+                "@type": "Person",
+                "name": "{{name}}",
+                "url": "{{url absolute="true"}}",
+                {{#if profile_image}}"image": "{{img_url profile_image absolute="true"}}",{{/if}}
+                {{#if bio}}"description": "{{bio}}",{{/if}}
+                "worksFor": {
+                    "@type": "NewsMediaOrganization",
+                    "name": "{{@site.title}}",
+                    "url": "{{@site.url}}"
+                },
+                "sameAs": [
+                    "https://x.com/Throttle_Times",
+                    "https://bsky.app/profile/throttle-times.com",
+                    "https://www.facebook.com/throttleetimes/",
+                    "https://mastodon.social/@hrottle_times",
+                    "{{@site.url}}/about/"
+                ]
+            }
+        }
+        </script>
     {{/author}}
 
     <section class="section gutter">
