@@ -188,4 +188,151 @@
             window.open(prefUrl, '_blank', 'noopener,noreferrer');
         });
     }
+
+    // Live Updates & Reading Progress (localStorage tracking and smooth scroll jump)
+    var postMain = document.querySelector('main.post');
+    if (postMain) {
+        var slug = postMain.getAttribute('data-post-slug') || window.location.pathname.replace(/^\/|\/$/g, '');
+        var updateEntries = Array.prototype.slice.call(document.querySelectorAll('.live-update-entry, [data-timestamp]'));
+
+        if (updateEntries.length > 0) {
+            var SEEN_KEY = 'tt_last_seen_' + slug;
+            var lastSeen = 0;
+            try { lastSeen = parseInt(localStorage.getItem(SEEN_KEY) || '0', 10); } catch (e) {}
+
+            var unseenList = [];
+            var maxTimestamp = 0;
+
+            updateEntries.forEach(function (entry) {
+                var rawTs = entry.getAttribute('data-timestamp');
+                if (!rawTs) {
+                    var timeElem = entry.querySelector('time');
+                    if (timeElem) rawTs = timeElem.getAttribute('datetime');
+                }
+                var entryTime = rawTs ? Date.parse(rawTs) : 0;
+                if (!isNaN(entryTime) && entryTime > maxTimestamp) {
+                    maxTimestamp = entryTime;
+                }
+
+                if (!isNaN(entryTime) && entryTime > lastSeen) {
+                    entry.classList.add('is-unseen');
+                    unseenList.push(entry);
+                } else {
+                    entry.classList.remove('is-unseen');
+                }
+            });
+
+            var headerBtn = document.getElementById('jump-to-updates-btn');
+            var floatBtn = document.getElementById('floating-jump-updates');
+            var badgeCount = document.getElementById('jump-badge-count');
+
+            var updateButtonLabels = function () {
+                var count = unseenList.length;
+                if (headerBtn) {
+                    headerBtn.hidden = false;
+                    var jumpText = headerBtn.querySelector('.jump-text');
+                    if (count > 0) {
+                        if (jumpText) jumpText.textContent = 'Jump to New Updates';
+                        if (badgeCount) {
+                            badgeCount.textContent = count.toString();
+                            badgeCount.hidden = false;
+                        }
+                    } else {
+                        if (jumpText) jumpText.textContent = '↓ Jump to Latest Update';
+                        if (badgeCount) badgeCount.hidden = true;
+                    }
+                }
+
+                if (floatBtn) {
+                    floatBtn.hidden = false;
+                    var floatLabel = floatBtn.querySelector('.floating-jump-label');
+                    if (count > 0) {
+                        if (floatLabel) floatLabel.textContent = 'New Updates (' + count + ')';
+                    } else {
+                        if (floatLabel) floatLabel.textContent = 'Latest Update';
+                    }
+                }
+            };
+
+            updateButtonLabels();
+
+            var markAllSeen = function () {
+                var recordTime = maxTimestamp > 0 ? maxTimestamp : Date.now();
+                try { localStorage.setItem(SEEN_KEY, recordTime.toString()); } catch (e) {}
+                lastSeen = recordTime;
+                updateEntries.forEach(function (e) { e.classList.remove('is-unseen'); });
+                unseenList = [];
+                if (badgeCount) badgeCount.hidden = true;
+                if (headerBtn) {
+                    var jumpText = headerBtn.querySelector('.jump-text');
+                    if (jumpText) jumpText.textContent = '✓ Up to date';
+                }
+                if (floatBtn) {
+                    floatBtn.style.opacity = '0.5';
+                    setTimeout(function () {
+                        if (floatBtn && unseenList.length === 0) floatBtn.style.opacity = '';
+                    }, 2000);
+                }
+            };
+
+            var handleJump = function (e) {
+                if (e) e.preventDefault();
+                var target = unseenList.length > 0 ? unseenList[0] : updateEntries[updateEntries.length - 1];
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.classList.add('is-focused');
+                    setTimeout(function () { target.classList.remove('is-focused'); }, 3000);
+                }
+                markAllSeen();
+            };
+
+            if (headerBtn) headerBtn.addEventListener('click', handleJump);
+            if (floatBtn) floatBtn.addEventListener('click', handleJump);
+
+            // Hide floating button when at the very top or near the bottom
+            var handleScroll = function () {
+                if (!floatBtn) return;
+                var docElem = document.documentElement || document.body;
+                var scrolled = window.pageYOffset || (docElem ? docElem.scrollTop : 0);
+                var docHeight = (docElem ? docElem.scrollHeight : 0) - (window.innerHeight || 800);
+                if (scrolled < 300 || (docHeight > 0 && scrolled > docHeight - 200)) {
+                    floatBtn.style.transform = 'translateY(100px)';
+                    floatBtn.style.opacity = '0';
+                    floatBtn.style.pointerEvents = 'none';
+                } else {
+                    floatBtn.style.transform = 'translateY(0)';
+                    floatBtn.style.opacity = '1';
+                    floatBtn.style.pointerEvents = 'auto';
+                }
+            };
+
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            handleScroll();
+
+            // Observe entries to mark as seen as reader scrolls naturally
+            if ('IntersectionObserver' in window) {
+                var observer = new IntersectionObserver(function (records) {
+                    records.forEach(function (rec) {
+                        if (rec.isIntersecting) {
+                            var entry = rec.target;
+                            if (entry.classList.contains('is-unseen')) {
+                                entry.classList.remove('is-unseen');
+                                var idx = unseenList.indexOf(entry);
+                                if (idx > -1) unseenList.splice(idx, 1);
+                                var rawTs = entry.getAttribute('data-timestamp');
+                                var entryTime = rawTs ? Date.parse(rawTs) : 0;
+                                if (!isNaN(entryTime) && entryTime > lastSeen) {
+                                    lastSeen = entryTime;
+                                    try { localStorage.setItem(SEEN_KEY, lastSeen.toString()); } catch (err) {}
+                                }
+                                updateButtonLabels();
+                            }
+                        }
+                    });
+                }, { threshold: 0.4 });
+
+                updateEntries.forEach(function (e) { observer.observe(e); });
+            }
+        }
+    }
 })();

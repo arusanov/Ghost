@@ -8,6 +8,7 @@
     <title>{{#is "home, post, page, tag, author"}}{{meta_title}}{{else}}All Articles{{#is "paged"}} (Page {{pagination.page}}){{/is}} - {{@site.title}}{{/is}}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     {{^is "home, post, page, tag, author, paged"}}
     <meta name="description" content="All motorcycle news, adventure bike buyer's guides, gear reviews, spy shots, and patent filings published on {{@site.title}}.">
     {{/is}}
