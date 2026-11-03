@@ -310,6 +310,57 @@ img {
     display: block;
 }
 
+.theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    color: var(--ink);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+    color: var(--accent);
+    border-color: var(--ink-secondary);
+    background: var(--paper-a);
+}
+
+.theme-toggle-btn .theme-icon-sun,
+.theme-toggle-btn .theme-icon-moon {
+    width: 17px;
+    height: 17px;
+    display: none;
+}
+
+:root .theme-toggle-btn .theme-icon-moon {
+    display: block;
+}
+:root .theme-toggle-btn .theme-icon-sun {
+    display: none;
+}
+
+:root[data-theme="dark"] .theme-toggle-btn .theme-icon-sun {
+    display: block;
+}
+:root[data-theme="dark"] .theme-toggle-btn .theme-icon-moon {
+    display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .theme-toggle-btn .theme-icon-sun {
+        display: block;
+    }
+    :root:not([data-theme="light"]) .theme-toggle-btn .theme-icon-moon {
+        display: none;
+    }
+}
+
 .nav-item {
     font-size: 14px;
     font-weight: 600;
@@ -982,6 +1033,61 @@ img {
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+/* Reading Progress Indicator Bar */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: var(--accent);
+    z-index: 10000;
+    pointer-events: none;
+    transition: width 0.08s linear;
+}
+
+/* Share Story Button */
+.share-story-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    background: var(--paper-a);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.share-story-btn:hover {
+    background: var(--paper-b);
+    border-color: var(--ink-secondary);
+    color: var(--accent);
+}
+
+.share-story-btn .share-icon {
+    width: 15px;
+    height: 15px;
+    display: block;
+}
+
+.share-story-btn.is-copied {
+    background: #e6f4ea;
+    border-color: #34a853;
+    color: #137333;
+}
+
+:root[data-theme="dark"] .share-story-btn.is-copied {
+    background: #0d381e;
+    border-color: #34a853;
+    color: #81c995;
 }
 
 [hidden],

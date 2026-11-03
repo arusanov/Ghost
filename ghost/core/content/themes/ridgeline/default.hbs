@@ -9,6 +9,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
+    <script>
+    (function(){
+        try {
+            var t = localStorage.getItem('tt_theme');
+            if (t === 'dark' || (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else if (t === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        } catch(e) {}
+    })();
+    </script>
     {{^is "home, post, page, tag, author, paged"}}
     <meta name="description" content="All motorcycle news, adventure bike buyer's guides, gear reviews, spy shots, and patent filings published on {{@site.title}}.">
     {{/is}}

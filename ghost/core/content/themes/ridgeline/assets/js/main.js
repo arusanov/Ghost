@@ -344,4 +344,73 @@
                 updateEntries.forEach(function (e) { observer.observe(e); });
             }
         }
+
+        // -------------------------------------------------------------------------
+        // Manual Dark / Light Mode Toggle
+        // -------------------------------------------------------------------------
+        var themeToggleBtn = document.getElementById('theme-toggle-btn');
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', function () {
+                var current = document.documentElement.getAttribute('data-theme');
+                var isDark = false;
+                if (current === 'dark') {
+                    isDark = true;
+                } else if (!current && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    isDark = true;
+                }
+
+                var nextTheme = isDark ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', nextTheme);
+                try { localStorage.setItem('tt_theme', nextTheme); } catch (e) {}
+            });
+        }
+
+        // -------------------------------------------------------------------------
+        // Reading Progress Indicator Bar
+        // -------------------------------------------------------------------------
+        var progressBar = document.getElementById('reading-progress');
+        var articleBody = document.querySelector('.article-body');
+        if (progressBar && articleBody) {
+            var updateProgress = function () {
+                var rect = articleBody.getBoundingClientRect();
+                var totalHeight = rect.height - window.innerHeight;
+                if (totalHeight <= 0) {
+                    progressBar.style.width = '100%';
+                    return;
+                }
+                var progress = -rect.top / totalHeight;
+                progress = Math.max(0, Math.min(1, progress));
+                progressBar.style.width = (progress * 100).toFixed(1) + '%';
+            };
+            window.addEventListener('scroll', updateProgress, { passive: true });
+            updateProgress();
+        }
+
+        // -------------------------------------------------------------------------
+        // Native Web Share API with Clipboard Fallback
+        // -------------------------------------------------------------------------
+        var shareBtn = document.getElementById('share-story-btn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', function () {
+                var pageTitle = document.title || 'Throttle Times';
+                var pageUrl = window.location.href;
+                if (navigator.share) {
+                    navigator.share({
+                        title: pageTitle,
+                        url: pageUrl
+                    }).catch(function () {});
+                } else if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(pageUrl).then(function () {
+                        var label = shareBtn.querySelector('.share-btn-text');
+                        var origText = label ? label.textContent : '';
+                        if (label) label.textContent = 'Copied!';
+                        shareBtn.classList.add('is-copied');
+                        setTimeout(function () {
+                            if (label) label.textContent = origText || 'Share';
+                            shareBtn.classList.remove('is-copied');
+                        }, 2000);
+                    }).catch(function () {});
+                }
+            });
+        }
 })();
