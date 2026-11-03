@@ -46,6 +46,7 @@ function runMain(options = {}) {
     const headerBtn = {
         get hidden() { return headerHidden; },
         set hidden(v) { headerHidden = v; },
+        style: {},
         querySelector: (sel) => {
             if (sel === '.jump-text') return { set textContent(v) { headerText = v; }, get textContent() { return headerText; } };
             return null;
@@ -72,7 +73,8 @@ function runMain(options = {}) {
     };
 
     const postElem = {
-        getAttribute: (attr) => attr === 'data-post-slug' ? (options.slug || 'eicma-2026-motorcycle-reveals') : null
+        getAttribute: (attr) => attr === 'data-post-slug' ? (options.slug || 'eicma-2026-motorcycle-reveals') : null,
+        querySelectorAll: (sel) => sel.includes('.live-update-entry') ? entries : []
     };
 
     const elementsById = {
@@ -192,4 +194,14 @@ test('visitor up-to-date sees no unseen badge and button offers latest update ju
     assert.equal(e2.classList.contains('is-unseen'), false);
     assert.equal(app.badgeCount.hidden, true);
     assert.equal(app.getHeaderText(), '↓ Jump to Latest Update');
+});
+
+test('standard article with zero update entries keeps buttons strictly hidden and disabled', () => {
+    const app = runMain({
+        slug: 'klim-badlands-pro-gen-5-rogue-armor',
+        entries: []
+    });
+
+    assert.equal(app.headerBtn.hidden, true);
+    assert.equal(app.floatBtn.hidden, true);
 });

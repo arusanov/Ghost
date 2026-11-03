@@ -191,70 +191,80 @@
 
     // Live Updates & Reading Progress (localStorage tracking and smooth scroll jump)
     var postMain = document.querySelector('main.post');
-    if (postMain) {
+    var updateEntries = postMain ? Array.prototype.slice.call(postMain.querySelectorAll('.article-body .live-update-entry')) : [];
+    var headerBtn = document.getElementById('jump-to-updates-btn');
+    var floatBtn = document.getElementById('floating-jump-updates');
+    var badgeCount = document.getElementById('jump-badge-count');
+
+    // Never show update buttons on pages without live update entries
+    if (!postMain || updateEntries.length === 0) {
+        if (headerBtn) {
+            headerBtn.hidden = true;
+            if (headerBtn.style) headerBtn.style.display = 'none';
+        }
+        if (floatBtn) {
+            floatBtn.hidden = true;
+            if (floatBtn.style) floatBtn.style.display = 'none';
+        }
+    } else {
         var slug = postMain.getAttribute('data-post-slug') || window.location.pathname.replace(/^\/|\/$/g, '');
-        var updateEntries = Array.prototype.slice.call(document.querySelectorAll('.live-update-entry, [data-timestamp]'));
+        var SEEN_KEY = 'tt_last_seen_' + slug;
+        var lastSeen = 0;
+        try { lastSeen = parseInt(localStorage.getItem(SEEN_KEY) || '0', 10); } catch (e) {}
 
-        if (updateEntries.length > 0) {
-            var SEEN_KEY = 'tt_last_seen_' + slug;
-            var lastSeen = 0;
-            try { lastSeen = parseInt(localStorage.getItem(SEEN_KEY) || '0', 10); } catch (e) {}
+        var unseenList = [];
+        var maxTimestamp = 0;
 
-            var unseenList = [];
-            var maxTimestamp = 0;
+        updateEntries.forEach(function (entry) {
+            var rawTs = entry.getAttribute('data-timestamp');
+            if (!rawTs) {
+                var timeElem = entry.querySelector('time');
+                if (timeElem) rawTs = timeElem.getAttribute('datetime');
+            }
+            var entryTime = rawTs ? Date.parse(rawTs) : 0;
+            if (!isNaN(entryTime) && entryTime > maxTimestamp) {
+                maxTimestamp = entryTime;
+            }
 
-            updateEntries.forEach(function (entry) {
-                var rawTs = entry.getAttribute('data-timestamp');
-                if (!rawTs) {
-                    var timeElem = entry.querySelector('time');
-                    if (timeElem) rawTs = timeElem.getAttribute('datetime');
-                }
-                var entryTime = rawTs ? Date.parse(rawTs) : 0;
-                if (!isNaN(entryTime) && entryTime > maxTimestamp) {
-                    maxTimestamp = entryTime;
-                }
+            if (!isNaN(entryTime) && entryTime > lastSeen) {
+                entry.classList.add('is-unseen');
+                unseenList.push(entry);
+            } else {
+                entry.classList.remove('is-unseen');
+            }
+        });
 
-                if (!isNaN(entryTime) && entryTime > lastSeen) {
-                    entry.classList.add('is-unseen');
-                    unseenList.push(entry);
+        var updateButtonLabels = function () {
+            var count = unseenList.length;
+            if (headerBtn) {
+                headerBtn.hidden = false;
+                if (headerBtn.style) headerBtn.style.display = '';
+                var jumpText = headerBtn.querySelector('.jump-text');
+                if (count > 0) {
+                    if (jumpText) jumpText.textContent = 'Jump to New Updates';
+                    if (badgeCount) {
+                        badgeCount.textContent = count.toString();
+                        badgeCount.hidden = false;
+                    }
                 } else {
-                    entry.classList.remove('is-unseen');
+                    if (jumpText) jumpText.textContent = '↓ Jump to Latest Update';
+                    if (badgeCount) badgeCount.hidden = true;
                 }
-            });
+            }
 
-            var headerBtn = document.getElementById('jump-to-updates-btn');
-            var floatBtn = document.getElementById('floating-jump-updates');
-            var badgeCount = document.getElementById('jump-badge-count');
-
-            var updateButtonLabels = function () {
-                var count = unseenList.length;
-                if (headerBtn) {
-                    headerBtn.hidden = false;
-                    var jumpText = headerBtn.querySelector('.jump-text');
-                    if (count > 0) {
-                        if (jumpText) jumpText.textContent = 'Jump to New Updates';
-                        if (badgeCount) {
-                            badgeCount.textContent = count.toString();
-                            badgeCount.hidden = false;
-                        }
-                    } else {
-                        if (jumpText) jumpText.textContent = '↓ Jump to Latest Update';
-                        if (badgeCount) badgeCount.hidden = true;
-                    }
+            if (floatBtn) {
+                floatBtn.hidden = false;
+                if (floatBtn.style) floatBtn.style.display = '';
+                var floatLabel = floatBtn.querySelector('.floating-jump-label');
+                if (count > 0) {
+                    if (floatLabel) floatLabel.textContent = 'New Updates (' + count + ')';
+                } else {
+                    if (floatLabel) floatLabel.textContent = 'Latest Update';
                 }
+            }
+        };
 
-                if (floatBtn) {
-                    floatBtn.hidden = false;
-                    var floatLabel = floatBtn.querySelector('.floating-jump-label');
-                    if (count > 0) {
-                        if (floatLabel) floatLabel.textContent = 'New Updates (' + count + ')';
-                    } else {
-                        if (floatLabel) floatLabel.textContent = 'Latest Update';
-                    }
-                }
-            };
-
-            updateButtonLabels();
+        updateButtonLabels();
 
             var markAllSeen = function () {
                 var recordTime = maxTimestamp > 0 ? maxTimestamp : Date.now();
@@ -334,5 +344,4 @@
                 updateEntries.forEach(function (e) { observer.observe(e); });
             }
         }
-    }
 })();

@@ -984,6 +984,12 @@ img {
     flex-wrap: wrap;
 }
 
+[hidden],
+.jump-to-updates-btn[hidden],
+.floating-jump-updates[hidden] {
+    display: none !important;
+}
+
 @keyframes live-pulse {
     0% {
         transform: scale(0.95);
@@ -1019,6 +1025,10 @@ img {
 }
 
 .jump-to-updates-btn {
+    display: none;
+}
+
+.jump-to-updates-btn:not([hidden]) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1058,6 +1068,10 @@ img {
 }
 
 .floating-jump-updates {
+    display: none;
+}
+
+.floating-jump-updates:not([hidden]) {
     position: fixed;
     bottom: 24px;
     right: 24px;

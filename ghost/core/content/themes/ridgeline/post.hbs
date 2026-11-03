@@ -43,11 +43,13 @@
             </div>
 
             <div class="post-header-actions">
+                {{#has tag="#hub, Event Hubs"}}
                 <button class="jump-to-updates-btn" id="jump-to-updates-btn" type="button" hidden title="Jump to the newest live update">
                     <span class="live-pulse-dot" aria-hidden="true"></span>
                     <span class="jump-text">Jump to New Updates</span>
                     <span class="jump-badge-count" id="jump-badge-count" hidden>0</span>
                 </button>
+                {{/has}}
 
                 <div class="google-preferred-badge">
                     <a class="google-news-btn" id="google-preferred-btn" href="https://www.google.com/preferences/source?q=throttle-times.com" target="_blank" rel="noopener" title="Add Throttle Times as a preferred source on Google Search and Discover">
@@ -128,11 +130,13 @@
         </section>
     {{/if}}
 
+    {{#has tag="#hub, Event Hubs"}}
     <button class="floating-jump-updates" id="floating-jump-updates" type="button" aria-label="Jump to newest update" hidden>
         <span class="live-pulse-dot" aria-hidden="true"></span>
         <span class="floating-jump-label">New Updates</span>
         <span class="floating-jump-arrow" aria-hidden="true">↓</span>
     </button>
+    {{/has}}
 
 </main>
 {{#if primary_tag}}
