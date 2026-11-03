@@ -76,6 +76,7 @@ function createMockEnvironment(options = {}) {
     const themeToggleBtn = createElement('theme-toggle-btn', 'button');
     const readingProgress = createElement('reading-progress', 'div');
     const shareStoryBtn = createElement('share-story-btn', 'button');
+    const backToTopBtn = createElement('back-to-top-btn', 'button');
     const articleBody = createElement('article-body-el', 'div', ['article-body']);
 
     const document = {
@@ -111,13 +112,17 @@ function createMockEnvironment(options = {}) {
         }
     };
 
+    let scrollToArgs = null;
     const window = {
         document,
         localStorage,
         navigator,
         location: { href: 'https://throttle-times.com/sample-story/' },
         innerHeight: 800,
-        pageYOffset: 0,
+        pageYOffset: options.pageYOffset || 0,
+        scrollTo: (args) => {
+            scrollToArgs = args;
+        },
         matchMedia: () => ({ matches: options.systemDark || false }),
         addEventListener: (ev, fn) => {
             if (!listeners.has(ev)) listeners.set(ev, []);
@@ -147,11 +152,13 @@ function createMockEnvironment(options = {}) {
         themeToggleBtn,
         readingProgress,
         shareStoryBtn,
+        backToTopBtn,
         documentElement,
         localStorage,
         window,
         getSharedData: () => sharedData,
-        getClipboardData: () => clipboardData
+        getClipboardData: () => clipboardData,
+        getScrollToArgs: () => scrollToArgs
     };
 }
 
@@ -188,4 +195,16 @@ test('share button falls back to clipboard when navigator.share is unavailable',
     env.shareStoryBtn.trigger('click');
     await Promise.resolve();
     assert.equal(env.getClipboardData(), 'https://throttle-times.com/sample-story/');
+});
+
+test('back to top button becomes visible past 600px and scrolls window to top', () => {
+    const env = createMockEnvironment({ pageYOffset: 750 });
+    assert.equal(env.backToTopBtn.classList.contains('is-visible'), true);
+    assert.equal(env.backToTopBtn.hidden, false);
+
+    env.backToTopBtn.trigger('click');
+    const args = env.getScrollToArgs();
+    assert.ok(args);
+    assert.equal(args.top, 0);
+    assert.equal(args.behavior, 'smooth');
 });

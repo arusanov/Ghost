@@ -43,3 +43,4 @@ Disallow: /webmentions/receive/
 Disallow: /.ghost/analytics/api/
 
 Sitemap: https://throttle-times.com/sitemap.xml
+Sitemap: https://throttle-times.com/sitemap-news.xml

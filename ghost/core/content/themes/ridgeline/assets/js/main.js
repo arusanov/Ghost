@@ -413,4 +413,26 @@
                 }
             });
         }
+
+        // -------------------------------------------------------------------------
+        // Floating Back to Top Button
+        // -------------------------------------------------------------------------
+        var backToTopBtn = document.getElementById('back-to-top-btn');
+        if (backToTopBtn) {
+            var toggleBackToTop = function () {
+                var docElem = document.documentElement || document.body;
+                var scrolled = window.pageYOffset || (docElem ? docElem.scrollTop : 0);
+                if (scrolled > 600) {
+                    backToTopBtn.hidden = false;
+                    backToTopBtn.classList.add('is-visible');
+                } else {
+                    backToTopBtn.classList.remove('is-visible');
+                }
+            };
+            window.addEventListener('scroll', toggleBackToTop, { passive: true });
+            backToTopBtn.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+            toggleBackToTop();
+        }
 })();

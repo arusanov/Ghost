@@ -1090,9 +1090,126 @@ img {
     color: #81c995;
 }
 
+/* Floating Back to Top Button */
+.back-to-top-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper-a);
+    color: var(--ink);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    z-index: 998;
+    transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.15s ease, color 0.15s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.back-to-top-btn.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.back-to-top-btn:hover {
+    background: var(--paper-b);
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+:root[data-theme="dark"] .back-to-top-btn {
+    background: #1c1a17;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ------------------------------------------------- motorcycle spec sheet card */
+.spec-card {
+    margin: 28px 0;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius);
+    background: var(--paper-a);
+    overflow: hidden;
+}
+
+.spec-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: var(--paper-b);
+    border-bottom: 1px solid var(--hairline-strong);
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+}
+
+.spec-card-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+}
+
+.spec-sheet-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.spec-sheet-table tr {
+    border-bottom: 1px solid var(--hairline);
+    transition: background-color 0.1s ease;
+}
+
+.spec-sheet-table tr:last-child {
+    border-bottom: none;
+}
+
+.spec-sheet-table tr:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+:root[data-theme="dark"] .spec-sheet-table tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.spec-sheet-table th,
+.spec-sheet-table td {
+    padding: 10px 18px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.spec-sheet-table th {
+    width: 38%;
+    font-weight: 600;
+    color: var(--ink-secondary);
+    border-right: 1px solid var(--hairline);
+}
+
+.spec-sheet-table td {
+    font-weight: 500;
+    color: var(--ink);
+}
+
 [hidden],
 .jump-to-updates-btn[hidden],
-.floating-jump-updates[hidden] {
+.floating-jump-updates[hidden],
+.back-to-top-btn[hidden] {
     display: none !important;
 }
 
