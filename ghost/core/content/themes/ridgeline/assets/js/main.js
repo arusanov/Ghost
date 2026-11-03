@@ -136,4 +136,56 @@
             }
         }
     });
+
+    // Google Preferred Source: single button with cross-page persistent follow state
+    var googleBtn = document.getElementById('google-preferred-btn');
+    if (googleBtn) {
+        var PREF_KEY = 'tt_google_preferred';
+        var isFollowed = false;
+        try { isFollowed = localStorage.getItem(PREF_KEY) === 'true'; } catch (e) {}
+
+        var applyFollowState = function (followed) {
+            var label = googleBtn.querySelector('.google-news-label');
+            var cta = googleBtn.querySelector('.google-news-cta');
+            if (followed) {
+                googleBtn.classList.add('is-following');
+                if (label) label.textContent = 'Preferred on Google';
+                if (cta) cta.textContent = '✓ Following';
+                googleBtn.setAttribute('title', 'Throttle Times is added to your preferred sources on Google. Click to manage preferences.');
+            } else {
+                googleBtn.classList.remove('is-following');
+                if (label) label.textContent = 'Preferred on Google';
+                if (cta) cta.textContent = '+ Follow';
+                googleBtn.setAttribute('title', 'Add Throttle Times as a preferred source on Google Search and Discover');
+            }
+        };
+
+        if (isFollowed) {
+            applyFollowState(true);
+        }
+
+        googleBtn.addEventListener('click', function (e) {
+            var prefUrl = 'https://www.google.com/preferences/source?q=throttle-times.com';
+            var currentlyFollowed = false;
+            try { currentlyFollowed = localStorage.getItem(PREF_KEY) === 'true'; } catch (err) {}
+
+            if (currentlyFollowed) {
+                // Already followed: let them view/manage on Google without resetting or asking again
+                return; // Default <a> href opens prefUrl in new tab
+            }
+
+            e.preventDefault();
+            try { localStorage.setItem(PREF_KEY, 'true'); } catch (err) {}
+            applyFollowState(true);
+
+            // Trigger Google's native addPreferredSource popup if SDK is loaded; otherwise open preference tab
+            if (window.PREFERRED_SOURCE && typeof window.PREFERRED_SOURCE.api === 'object' && typeof window.PREFERRED_SOURCE.api.addPreferredSource === 'function') {
+                try {
+                    window.PREFERRED_SOURCE.api.addPreferredSource();
+                    return;
+                } catch (apiErr) {}
+            }
+            window.open(prefUrl, '_blank', 'noopener,noreferrer');
+        });
+    }
 })();
