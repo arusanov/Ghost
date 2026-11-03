@@ -867,6 +867,16 @@ img {
     color: var(--accent);
 }
 
+/* Google Preferred Source widget */
+[google-add-preferred-source-btn] {
+    display: inline-flex;
+    align-items: center;
+}
+
+[google-add-preferred-source-btn]:not(:empty) + .google-preferred-fallback {
+    display: none;
+}
+
 .post-comments {
     max-width: 680px;
     margin: 0 auto;
